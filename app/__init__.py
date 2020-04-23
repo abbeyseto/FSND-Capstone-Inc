@@ -7,11 +7,11 @@ from flask_cors import CORS
 
 app = Flask(__name__, static_folder=None)
     # app configuration
-app_settings = os.getenv(
-    'APP_SETTINGS',
-    'app.config.DevelopmentConfig'
-)
-app.config.from_object(app_settings)
+# app_settings = os.getenv(
+#     'APP_SETTINGS',
+#     'app.config.DevelopmentConfig'
+# )
+# app.config.from_object(app_settings)
 # setup_db(app)
 CORS(app)
 

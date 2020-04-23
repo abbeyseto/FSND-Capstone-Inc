@@ -1,0 +1,264 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.5.19
+-- Dumped by pg_dump version 9.5.19
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: Actors; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Actors" (
+    id integer NOT NULL,
+    name character varying,
+    age integer,
+    email character varying,
+    salary integer
+);
+
+
+ALTER TABLE public."Actors" OWNER TO postgres;
+
+--
+-- Name: Actors_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public."Actors_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public."Actors_id_seq" OWNER TO postgres;
+
+--
+-- Name: Actors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public."Actors_id_seq" OWNED BY public."Actors".id;
+
+
+--
+-- Name: Movies; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Movies" (
+    id integer NOT NULL,
+    name character varying,
+    length double precision,
+    genre character varying
+);
+
+
+ALTER TABLE public."Movies" OWNER TO postgres;
+
+--
+-- Name: Movies_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public."Movies_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public."Movies_id_seq" OWNER TO postgres;
+
+--
+-- Name: Movies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public."Movies_id_seq" OWNED BY public."Movies".id;
+
+
+--
+-- Name: acting_in; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.acting_in (
+    actor_id integer NOT NULL,
+    movie_id integer NOT NULL
+);
+
+
+ALTER TABLE public.acting_in OWNER TO postgres;
+
+--
+-- Name: alembic_version; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.alembic_version (
+    version_num character varying(32) NOT NULL
+);
+
+
+ALTER TABLE public.alembic_version OWNER TO postgres;
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Actors" ALTER COLUMN id SET DEFAULT nextval('public."Actors_id_seq"'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Movies" ALTER COLUMN id SET DEFAULT nextval('public."Movies_id_seq"'::regclass);
+
+
+--
+-- Data for Name: Actors; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Actors" (id, name, age, email, salary) FROM stdin;
+1	ALi	30	ali@gmail.com	5000
+2	Ahmed	30	Ahmed@gmail.com	7000
+3	Noha	38	Noha@gmail.com	1000
+\.
+
+
+--
+-- Name: Actors_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."Actors_id_seq"', 3, true);
+
+
+--
+-- Data for Name: Movies; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Movies" (id, name, length, genre) FROM stdin;
+1	GoGo	1.30000000000000004	Action
+2	alo	10.5	Thriler
+3	matygy	1.89999999999999991	Romance
+\.
+
+
+--
+-- Name: Movies_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."Movies_id_seq"', 3, true);
+
+
+--
+-- Data for Name: acting_in; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.acting_in (actor_id, movie_id) FROM stdin;
+1	1
+1	2
+1	3
+2	3
+2	1
+3	1
+3	2
+\.
+
+
+--
+-- Data for Name: alembic_version; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.alembic_version (version_num) FROM stdin;
+6554a1f27c92
+\.
+
+
+--
+-- Name: Actors_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Actors"
+    ADD CONSTRAINT "Actors_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: Movies_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Movies"
+    ADD CONSTRAINT "Movies_pkey" PRIMARY KEY (id);
+
+
+--
+-- Name: acting_in_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.acting_in
+    ADD CONSTRAINT acting_in_pkey PRIMARY KEY (actor_id, movie_id);
+
+
+--
+-- Name: alembic_version_pkc; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.alembic_version
+    ADD CONSTRAINT alembic_version_pkc PRIMARY KEY (version_num);
+
+
+--
+-- Name: acting_in_actor_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.acting_in
+    ADD CONSTRAINT acting_in_actor_id_fkey FOREIGN KEY (actor_id) REFERENCES public."Actors"(id);
+
+
+--
+-- Name: acting_in_movie_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.acting_in
+    ADD CONSTRAINT acting_in_movie_id_fkey FOREIGN KEY (movie_id) REFERENCES public."Movies"(id);
+
+
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--

@@ -1,4 +1,4 @@
-#!/bin/sh
+# !/bin/sh
 
 # export AUTH0_DOMAIN='testfsnd.auth0.com'
 # export ALGORITHMS=['RS256']

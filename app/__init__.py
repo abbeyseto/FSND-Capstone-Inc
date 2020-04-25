@@ -1,5 +1,5 @@
 import os
-from flask import Flask, abort, json, jsonify, request, redirect
+from flask import Flask, abort, json, jsonify, request, redirect, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from app.models import setup_db, Actors, Movies
@@ -46,8 +46,7 @@ def authenticate():
 
 @app.route('/')
 def welcome():
-    msg = 'Welcome to Casting Agency API'
-    return jsonify(msg)
+    return render_template('index.html')
 
 
 @app.route('/Actors', methods=['GET'])

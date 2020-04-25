@@ -60,6 +60,9 @@ Setting the `FLASK_ENV` variable to `development` will detect file changes and r
 
 Setting the `FLASK_APP` variable to `app/__init__.py` directs flask to use the this file to find the application.
 
+## Authentication
+
+Tokens nand jwts needed for Authentivation can be found in the `setup.sh` file
 
 ## API Reference
 

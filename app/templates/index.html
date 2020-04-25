@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body{
+        background-color: bisque;
+        margin: 0 1%;
+        padding: 2%;
+        font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    }
+</style>
+<body>
+
+    <h1 id="capstone-agency-api">Welcome to Capstone Agency API</h1>
+    <p>This project is a web app for a casting agency (Capstone Inc.) where users can add movies, actors, and relate
+        each actor to the movies he acted in, and vice versa.</p>
+    <p>There are some level of permission set in this API, so depending on the kind of user, there are roles and
+        permissions assoinged to each credentials. This project uses python, flask and postgresql for it's backend and
+        hosted on heruko.</p>
+    <p>All backend code follows <a href="https://www.python.org/dev/peps/pep-0008/">PEP8 style guidelines</a></p>
+    <p>No frontend is developed for this app, you can use it using cURL or <a href="https://www.postman.com">Postman</a>
+    </p>
+    <h2 id="deployment">Deployment</h2>
+    <p>This app is deployed on heruko under this link <a href="https://capstonez.herokuapp.com/">Capstone-z Inc</a>.</p>
+    <h2 id="getting-started">Getting Started</h2>
+    <h3 id="installing-dependencies">Installing Dependencies</h3>
+    <h4 id="python-3.7">Python 3.7</h4>
+    <p>Follow instructions to install the latest version of python for your platform in the <a
+            href="https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python">python
+            docs</a></p>
+    <h4 id="virtual-enviornment">Virtual Enviornment</h4>
+    <p>I recommend working within a virtual environment whenever using Python for projects. This keeps dependencies for
+        each project separate and organaized. Instructions for setting up a virual enviornment for the platform can be
+        found in the <a href="https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/">python
+            docs</a></p>
+    <h4 id="pip-dependencies">PIP Dependencies</h4>
+    <p>After setting up the virtual environment, install dependencies by running:</p>
+    <pre
+        class="sourceCode bash"><code class="sourceCode bash"><span class="kw">pip</span> install -r requirements.txt</code></pre>
+    <p>This will install all of the required packages we selected within the <code>requirements.txt</code> file.</p>
+    <p>**Note: If you add any other library to this project, remember to always run the command below to update your
+        requirements.txt file*</p>
+    <pre
+        class="sourceCode bash"><code class="sourceCode bash"><span class="kw">pip</span> freeze <span class="kw">&gt;</span> requirements.txt</code></pre>
+    <h2 id="running-the-server">Running the server</h2>
+    <p>first ensure you are working using your created virtual environment.</p>
+    <p>To run the server, execute:</p>
+    <pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">source</span> setup.sh
+<span class="kw">export</span> <span class="ot">FLASK_ENV=</span>development
+<span class="kw">flask</span> run</code></pre>
+    <p>Setting the <code>FLASK_ENV</code> variable to <code>development</code> will detect file changes and restart the
+        server automatically.</p>
+    <p>Setting the <code>FLASK_APP</code> variable to <code>app/__init__.py</code> directs flask to use the this file to
+        find the application.</p>
+    <h2 id="api-reference">API Reference</h2>
+    <h3 id="getting-started-1">Getting Started</h3>
+    <ul>
+        <li>Base URL: You can run this API locally at the default <code>http://127.0.0.1:5000/</code></li>
+        <li>Authentication: This app has 3 users. Each has his own token which are provided in <code>setup.sh</code>
+            file. Details about each user privlages are provided below.</li>
+    </ul>
+    <h3 id="endpoints">Endpoints</h3>
+    <ul>
+        <li>GET '/Actors'</li>
+        <li>GET '/Movies'</li>
+        <li>POST '/Actors'</li>
+        <li>POST '/Movies'</li>
+        <li>PATCH '/Actors/<int:id>'</li>
+        <li>PATCH '/Movies/<int:id>'</li>
+        <li>DELETE '/Actors/<int:id>'</li>
+        <li>DELETE '/Movies/<int:id>'</li>
+    </ul>
+    <p>Following is the demonstration of each endpoint.</p>
+    <ul>
+        <li>GET '/Actors'
+            <ul>
+                <li>Fetch all Actor info from db</li>
+                <li>Request Argument : None</li>
+                <li>Returns : JSON response containing all actors with their info, and request status</li>
+                <li>example
+                    <code>{       &quot;Actors&quot;: [         {           &quot;age&quot;: 38,           &quot;email&quot;: &quot;Noha@gmail.com&quot;,           &quot;id&quot;: 3,           &quot;movies&quot;: [             &quot;GoGo&quot;,             &quot;alo&quot;           ],           &quot;name&quot;: &quot;Noha&quot;,           &quot;salary&quot;: 1000         }       ],       &quot;success&quot;: true     }</code>
+                </li>
+            </ul>
+        </li>
+        <li>GET '/Movies'
+            <ul>
+                <li>Fetch all Movies info from db</li>
+                <li>Request Argument : None</li>
+                <li>Returns : JSON response containing all movies with their info, and request status</li>
+                <li>example
+                    <code>{       &quot;Movies&quot;: [         {           &quot;actors&quot;: [             &quot;ALi&quot;,             &quot;Ahmed&quot;           ],           &quot;genre&quot;: &quot;Romance&quot;,           &quot;id&quot;: 3,           &quot;length&quot;: 1.9         }       ],       &quot;success&quot;: true     }</code>
+                </li>
+            </ul>
+        </li>
+        <li>POST '/Actors'
+            <ul>
+                <li>Insert Actor info into db</li>
+                <li>Request Argument : <code>name</code> <code>email</code> <code>age</code> <code>salary</code>
+                    <code>movie_ID</code></li>
+                <li>Returns : JSON response containing request status</li>
+                <li>example <code>{       &quot;success&quot;: true     }</code></li>
+            </ul>
+        </li>
+        <li>POST '/Movies'
+            <ul>
+                <li>Insert Movie info into db</li>
+                <li>Request Argument : <code>name</code> <code>length</code> <code>genre</code> <code>actor_ID</code>
+                </li>
+                <li>Returns : JSON response containing request status</li>
+                <li>example <code>{       &quot;success&quot;: true     }</code></li>
+            </ul>
+        </li>
+        <li>PATCH '/Actors/<int:id>'
+                <ul>
+                    <li>Updtae Actor info and insert it db</li>
+                    <li>Request Argument : <code>Actor id</code> <code>name</code> <code>email</code> <code>age</code>
+                        <code>salary</code></li>
+                    <li>Returns : JSON response containing request status</li>
+                    <li>example <code>{       &quot;success&quot;: true     }</code></li>
+                </ul>
+        </li>
+        <li>PATCH '/Movies/<int:id>'
+                <ul>
+                    <li>Updtae Movie info and insert it db</li>
+                    <li>Request Argument : <code>Movie id</code> <code>name</code> <code>length</code>
+                        <code>genre</code></li>
+                    <li>Returns : JSON response containing request status</li>
+                    <li>example <code>{       &quot;success&quot;: true     }</code></li>
+                </ul>
+        </li>
+        <li>DELETE '/Actors/<int:id>'
+                <ul>
+                    <li>Delete Actor from db</li>
+                    <li>Request Argument : Actor id</li>
+                    <li>Returns : JSON response containing request status</li>
+                    <li>example <code>{       &quot;success&quot;: true     }</code></li>
+                </ul>
+        </li>
+        <li>DELETE '/Movies/<int:id>'
+                <ul>
+                    <li>Delete Movie from db</li>
+                    <li>Request Argument : Movie id</li>
+                    <li>Returns : JSON response containing request status</li>
+                    <li>example <code>{       &quot;success&quot;: true     }</code></li>
+                </ul>
+        </li>
+    </ul>
+    <h3 id="users">Users</h3>
+    <p>This app has 3 users. each user has his own privileges.</p>
+    <ul>
+        <li>Casting Assistant
+            <ul>
+                <li>Can view actors and movies</li>
+            </ul>
+        </li>
+        <li>Casting Director
+            <ul>
+                <li>All permissions a Casting Assistant has and…</li>
+                <li>Add or delete an actor from the database</li>
+                <li>Modify actors or movies</li>
+            </ul>
+        </li>
+        <li>Executive Producer
+            <ul>
+                <li>All permissions a Casting Director has and…</li>
+                <li>Add or delete a movie from the database</li>
+            </ul>
+        </li>
+    </ul>
+    <p>Please Note, to use any endpoint, you must send the request with user access token in Authorization header, which
+        are provided in <code>setup.sh</code>.</p>
+    <h2 id="testing">Testing</h2>
+    <p>To run the tests, run</p>
+    <pre><code>dropdb capstone_test
+createdb capstone_test
+psql capstone_test &lt; db.psql
+source setup.sh
+python test_app.py</code></pre>
+    <h2 id="author">Author</h2>
+    <p>Adenle Abiodun <code>adenleabbey@hotmail.com</code></p>
+
+</body>
+
+</html>

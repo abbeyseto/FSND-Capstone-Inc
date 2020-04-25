@@ -15,8 +15,8 @@ class CapstoneTest(unittest.TestCase):
         self.app = create_app()
         self.client = self.app.test_client
         self.database_name = "capstone_test"
-        self.user_name = "postgres"
-        self.password = "postgres"
+        self.user_name = "AshNelson"
+        self.password = "ologinahtti1"
         self.database_path = "postgresql://{}:{}@{}/{}".format(
             self.user_name,
             self.password,
@@ -77,7 +77,7 @@ class CapstoneTest(unittest.TestCase):
         self.assertEqual(ques, None)
 
     def test_422_Wrong_ID_delete_Actor(self):
-        res = self.client().delete('/Actors/1000', headers={
+        res = self.client().delete('/Actors/9000', headers={
             "Authorization": 'bearer '+self.token_producer})
         body = json.loads(res.data)
         self.assertEqual(res.status_code, 422)
@@ -100,7 +100,7 @@ class CapstoneTest(unittest.TestCase):
         self.assertEqual(ques, None)
 
     def test_422_Wrong_ID_delete_Movies(self):
-        res = self.client().delete('/Movies/1000', headers={
+        res = self.client().delete('/Movies/9000', headers={
             "Authorization": 'bearer '+self.token_producer})
         body = json.loads(res.data)
         self.assertEqual(res.status_code, 422)
@@ -117,10 +117,10 @@ class CapstoneTest(unittest.TestCase):
         res = self.client().post(
             '/Actors',
             json={
-                "name": "john",
-                "age": "10",
-                "salary": "3000",
-                "email": "kcdskl@jcds.com",
+                "name": "lilly",
+                "age": "8",
+                "salary": "2300",
+                "email": "lilly@capstone.com",
                 "movie_ID": "2"},
             headers={"Authorization": 'bearer '+self.token_director}
             )
@@ -132,11 +132,11 @@ class CapstoneTest(unittest.TestCase):
         res = self.client().post(
             '/Actors',
             json={
-                "name": "john",
-                "age": "10",
-                "salary": "3000",
-                "email": "kcdskl@jcds.com",
-                "movie_ID": "1000"},
+                "name": "lilly",
+                "age": "8",
+                "salary": "2300",
+                "email": "lilly@capstone.com",
+                "movie_ID": "200"},
             headers={"Authorization": 'bearer '+self.token_director}
             )
         body = json.loads(res.data)
@@ -147,10 +147,10 @@ class CapstoneTest(unittest.TestCase):
         res = self.client().post(
             '/Actors',
             json={
-                "name": "john",
-                "age": "10",
-                "salary": "3000",
-                "email": "kcdskl@jcds.com",
+                "name": "lilly",
+                "age": "8",
+                "salary": "2300",
+                "email": "lilly@capstone.com",
                 "movie_ID": "4"},
             headers={"Authorization": 'bearer '+self.token_assistant}
             )
@@ -162,8 +162,8 @@ class CapstoneTest(unittest.TestCase):
         res = self.client().post(
             '/Movies',
             json={
-                "name": "john",
-                "length": "10",
+                "name": "lilly",
+                "length": "120",
                 "genre": "Action",
                 "actor_ID": "3"},
             headers={"Authorization": 'bearer '+self.token_producer}
@@ -176,8 +176,8 @@ class CapstoneTest(unittest.TestCase):
         res = self.client().post(
             '/Movies',
             json={
-                "name": "john",
-                "length": "10",
+                "name": "lilly",
+                "length": "120",
                 "genre": "Action",
                 "actor_ID": "10000"},
             headers={"Authorization": 'bearer '+self.token_producer}
@@ -190,8 +190,8 @@ class CapstoneTest(unittest.TestCase):
         res = self.client().post(
             '/Movies',
             json={
-                "name": "john",
-                "length": "10",
+                "name": "lilly",
+                "length": "120",
                 "genre": "Action",
                 "actor_ID": "10000"},
             headers={"Authorization": 'bearer '+self.token_assistant}
@@ -204,8 +204,8 @@ class CapstoneTest(unittest.TestCase):
         res = self.client().patch(
             '/Movies/2',
             json={
-                "name": "john",
-                "length": "10",
+                "name": "lilly",
+                "length": "120",
                 "genre": "Action"},
             headers={"Authorization": 'bearer '+self.token_producer}
             )
@@ -217,8 +217,8 @@ class CapstoneTest(unittest.TestCase):
         res = self.client().patch(
             '/Movies/1000',
             json={
-                "name": "john",
-                "length": "10",
+                "name": "lilly",
+                "length": "120",
                 "genre": "Action"},
             headers={"Authorization": 'bearer '+self.token_producer}
             )
@@ -230,8 +230,8 @@ class CapstoneTest(unittest.TestCase):
         res = self.client().patch(
             '/Movies/1000',
             json={
-                "name": "john",
-                "length": "10",
+                "name": "lilly",
+                "length": "120",
                 "genre": "Action"},
             headers={"Authorization": 'bearer '+self.token_assistant}
             )
@@ -243,10 +243,10 @@ class CapstoneTest(unittest.TestCase):
         res = self.client().patch(
             '/Actors/3',
             json={
-                "name": "john",
-                "age": "10",
-                "salary": "3000",
-                "email": "kcdskl@jcds.com"},
+                "name": "lilly",
+                "age": "8",
+                "salary": "2300",
+                "email": "lilly@capstone.com"},
             headers={"Authorization": 'bearer '+self.token_producer}
             )
         body = json.loads(res.data)
@@ -257,10 +257,10 @@ class CapstoneTest(unittest.TestCase):
         res = self.client().patch(
             '/Actors/1000',
             json={
-                "name": "john",
-                "age": "10",
-                "salary": "3000",
-                "email": "kcdskl@jcds.com"},
+                "name": "lilly",
+                "age": "8",
+                "salary": "2300",
+                "email": "lilly@capstone.com"},
             headers={"Authorization": 'bearer '+self.token_producer}
             )
         body = json.loads(res.data)

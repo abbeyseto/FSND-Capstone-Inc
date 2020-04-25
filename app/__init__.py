@@ -166,7 +166,7 @@ def delete_Movies(payload, id):
 
 @app.route('/Movies', methods=['POST'])
 @requires_auth(permission='post:Movies')
-def insert_Movies():
+def insert_Movies(payload):
     '''
     This endpoint insert Movie information
     '''

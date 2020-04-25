@@ -3,8 +3,10 @@ import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
 
-from app import create_app
-from models import setup_db, Actors, Movies
+from app import app
+from app.models import db, setup_db, Actors, Movies
+
+app.testing = True
 
 
 class CapstoneTest(unittest.TestCase):
@@ -12,7 +14,7 @@ class CapstoneTest(unittest.TestCase):
         self.token_assistant = os.environ['assistant_token']
         self.token_director = os.environ['director_token']
         self.token_producer = os.environ['producer_token']
-        self.app = create_app()
+        self.app = app
         self.client = self.app.test_client
         self.database_name = "capstone_test"
         self.user_name = "AshNelson"
@@ -24,7 +26,7 @@ class CapstoneTest(unittest.TestCase):
             self.database_name)
         setup_db(self.app, self.database_path)
 
-        with self.app.app_context():
+        with self.app.app_context():    
             self.db = SQLAlchemy()
             self.db.init_app(self.app)
             self.db.create_all()
@@ -67,17 +69,150 @@ class CapstoneTest(unittest.TestCase):
         self.assertEqual(res.status_code, 404)
         self.assertEqual(body['success'], False)
 
-    def test_delete_Actor(self):
-        res = self.client().delete('/Actors/1', headers={
-            "Authorization": 'bearer '+self.token_producer})
+    def test_create_Actor(self):
+        res = self.client().post(
+            '/Actors',
+            data={
+                "name": "john",
+                "age": "10",
+                "salary": "3000",
+                "email": "kcdskl@jcds.com",
+                "movie_ID": "2"},
+            headers={"Authorization": 'bearer '+self.token_director}
+        )
         body = json.loads(res.data)
-        ques = Actors.query.filter_by(id=1).one_or_none()
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(body['success'], True)
-        self.assertEqual(ques, None)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(body['success'], False)
+
+    def test_422_wrong_Movie_ID_create_Actor(self):
+        res = self.client().post(
+            '/Actors',
+            data={
+                "name": "john",
+                "age": "10",
+                "salary": "3000",
+                "email": "kcdskl@jcds.com",
+                "movie_ID": "1000"},
+            headers={"Authorization": 'bearer '+self.token_director}
+        )
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(body['success'], False)
+
+    def test_401_Unauthorized_Permission_create_Actor(self):
+        res = self.client().post(
+            '/Actors',
+            data={
+                "name": "john",
+                "age": "10",
+                "salary": "3000",
+                "email": "kcdskl@jcds.com",
+                "movie_ID": "4"},
+            headers={"Authorization": 'bearer '+self.token_assistant}
+        )
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['success'], False)
+
+    def test_create_Movie(self):
+        res = self.client().post(
+            '/Movies',
+            data={
+                "name": "john",
+                "length": "10",
+                "genre": "Action",
+                "actor_ID": "3"},
+            headers={"Authorization": 'bearer '+self.token_producer}
+        )
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(body['success'], False)
+
+    def test_422_wrong_Actor_ID_create_Movie(self):
+        res = self.client().post(
+            '/Movies',
+            data={
+                "name": "john",
+                "length": "10",
+                "genre": "Action",
+                "actor_ID": "10000"},
+            headers={"Authorization": 'bearer '+self.token_producer}
+        )
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(body['success'], False)
+
+    def test_401_Unauthorized_Permission_create_Movie(self):
+        res = self.client().post(
+            '/Movies',
+            data={
+                "name": "john",
+                "length": "10",
+                "genre": "Action",
+                "actor_ID": "10000"},
+            headers={"Authorization": 'bearer '+self.token_assistant}
+        )
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['success'], False)
+
+    def test_update_Movies(self):
+        res = self.client().patch(
+            '/Movies/2',
+            data={
+                "name": "john",
+                "length": "10",
+                "genre": "Action"},
+            headers={"Authorization": 'bearer '+self.token_producer}
+        )
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(body['success'], False)
+
+    def test_404_wrong_ID_update_Movies(self):
+        res = self.client().patch(
+            '/Movies/1000',
+            data={
+                "name": "john",
+                "length": "10",
+                "genre": "Action"},
+            headers={"Authorization": 'bearer '+self.token_producer}
+        )
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(body['success'], False)
+
+    def test_401_Unauthorized_Permission_update_Movies(self):
+        res = self.client().patch(
+            '/Movies/1',
+            data={
+                "name": "john",
+                "length": "10",
+                "genre": "Action"},
+            headers={"Authorization": 'bearer '+self.token_assistant}
+        )
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['success'], False)
+
+ 
+    def test_404_wrong_ID_update_Actors(self):
+        res = self.client().patch(
+            '/Actors/1000',
+            data={
+                "name": "john",
+                "age": "10",
+                "salary": "3000",
+                "email": "kcdskl@jcds.com"},
+            headers={"Authorization": 'bearer '+self.token_producer}
+        )
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(body['success'], False)
+
 
     def test_422_Wrong_ID_delete_Actor(self):
-        res = self.client().delete('/Actors/9000', headers={
+        res = self.client().delete('/Actors/1000', headers={
             "Authorization": 'bearer '+self.token_producer})
         body = json.loads(res.data)
         self.assertEqual(res.status_code, 422)
@@ -90,181 +225,19 @@ class CapstoneTest(unittest.TestCase):
         self.assertEqual(res.status_code, 401)
         self.assertEqual(body['success'], False)
 
-    def test_delete_Movie(self):
-        res = self.client().delete('Movies/1', headers={
-            "Authorization": 'bearer '+self.token_producer})
-        body = json.loads(res.data)
-        ques = Movies.query.filter_by(id=1).one_or_none()
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(body['success'], True)
-        self.assertEqual(ques, None)
 
     def test_422_Wrong_ID_delete_Movies(self):
-        res = self.client().delete('/Movies/9000', headers={
+        res = self.client().delete('/Movies/1000', headers={
             "Authorization": 'bearer '+self.token_producer})
         body = json.loads(res.data)
         self.assertEqual(res.status_code, 422)
         self.assertEqual(body['success'], False)
 
     def test_Unauthorized_Permission_delete_Movies(self):
-        res = self.client().delete('/Movies/1', headers={
+        res = self.client().delete('/Movies/2', headers={
             "Authorization": 'bearer '+self.token_assistant})
         body = json.loads(res.data)
         self.assertEqual(res.status_code, 401)
-        self.assertEqual(body['success'], False)
-
-    def test_create_Actor(self):
-        res = self.client().post(
-            '/Actors',
-            json={
-                "name": "lilly",
-                "age": "8",
-                "salary": "2300",
-                "email": "lilly@capstone.com",
-                "movie_ID": "2"},
-            headers={"Authorization": 'bearer '+self.token_director}
-            )
-        body = json.loads(res.data)
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(body['success'], True)
-
-    def test_422_wrong_Movie_ID_create_Actor(self):
-        res = self.client().post(
-            '/Actors',
-            json={
-                "name": "lilly",
-                "age": "8",
-                "salary": "2300",
-                "email": "lilly@capstone.com",
-                "movie_ID": "200"},
-            headers={"Authorization": 'bearer '+self.token_director}
-            )
-        body = json.loads(res.data)
-        self.assertEqual(res.status_code, 404)
-        self.assertEqual(body['success'], False)
-
-    def test_401_Unauthorized_Permission_create_Actor(self):
-        res = self.client().post(
-            '/Actors',
-            json={
-                "name": "lilly",
-                "age": "8",
-                "salary": "2300",
-                "email": "lilly@capstone.com",
-                "movie_ID": "4"},
-            headers={"Authorization": 'bearer '+self.token_assistant}
-            )
-        body = json.loads(res.data)
-        self.assertEqual(res.status_code, 401)
-        self.assertEqual(body['success'], False)
-
-    def test_create_Movie(self):
-        res = self.client().post(
-            '/Movies',
-            json={
-                "name": "lilly",
-                "length": "120",
-                "genre": "Action",
-                "actor_ID": "3"},
-            headers={"Authorization": 'bearer '+self.token_producer}
-            )
-        body = json.loads(res.data)
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(body['success'], True)
-
-    def test_422_wrong_Actor_ID_create_Movie(self):
-        res = self.client().post(
-            '/Movies',
-            json={
-                "name": "lilly",
-                "length": "120",
-                "genre": "Action",
-                "actor_ID": "10000"},
-            headers={"Authorization": 'bearer '+self.token_producer}
-            )
-        body = json.loads(res.data)
-        self.assertEqual(res.status_code, 404)
-        self.assertEqual(body['success'], False)
-
-    def test_401_Unauthorized_Permission_create_Movie(self):
-        res = self.client().post(
-            '/Movies',
-            json={
-                "name": "lilly",
-                "length": "120",
-                "genre": "Action",
-                "actor_ID": "10000"},
-            headers={"Authorization": 'bearer '+self.token_assistant}
-            )
-        body = json.loads(res.data)
-        self.assertEqual(res.status_code, 401)
-        self.assertEqual(body['success'], False)
-
-    def test_update_Movies(self):
-        res = self.client().patch(
-            '/Movies/2',
-            json={
-                "name": "lilly",
-                "length": "120",
-                "genre": "Action"},
-            headers={"Authorization": 'bearer '+self.token_producer}
-            )
-        body = json.loads(res.data)
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(body['success'], True)
-
-    def test_404_wrong_ID_update_Movies(self):
-        res = self.client().patch(
-            '/Movies/1000',
-            json={
-                "name": "lilly",
-                "length": "120",
-                "genre": "Action"},
-            headers={"Authorization": 'bearer '+self.token_producer}
-            )
-        body = json.loads(res.data)
-        self.assertEqual(res.status_code, 404)
-        self.assertEqual(body['success'], False)
-
-    def test_401_Unauthorized_Permission_update_Movies(self):
-        res = self.client().patch(
-            '/Movies/1000',
-            json={
-                "name": "lilly",
-                "length": "120",
-                "genre": "Action"},
-            headers={"Authorization": 'bearer '+self.token_assistant}
-            )
-        body = json.loads(res.data)
-        self.assertEqual(res.status_code, 401)
-        self.assertEqual(body['success'], False)
-
-    def test_update_Actors(self):
-        res = self.client().patch(
-            '/Actors/3',
-            json={
-                "name": "lilly",
-                "age": "8",
-                "salary": "2300",
-                "email": "lilly@capstone.com"},
-            headers={"Authorization": 'bearer '+self.token_producer}
-            )
-        body = json.loads(res.data)
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(body['success'], True)
-
-    def test_404_wrong_ID_update_Actors(self):
-        res = self.client().patch(
-            '/Actors/1000',
-            json={
-                "name": "lilly",
-                "age": "8",
-                "salary": "2300",
-                "email": "lilly@capstone.com"},
-            headers={"Authorization": 'bearer '+self.token_producer}
-            )
-        body = json.loads(res.data)
-        self.assertEqual(res.status_code, 404)
         self.assertEqual(body['success'], False)
 
 

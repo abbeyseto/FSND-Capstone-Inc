@@ -1,12 +1,18 @@
 
-# Casting Agency API
+# Capstone Agency API
 
-This project is my first step to a fully developed web application following `Udacity Fullstack Developer Nanodegree` guidelines. It's a web app for a casting agency where users can add movies, actors, and relate each actor to the movies he acted in, and vice versa. This project uses python, flask and postgresql for it's backend and hosted on heruko. 
+This project is a web app for a casting agency (Capstone Inc.) where users can add movies, actors, and relate each actor to the movies he acted in, and vice versa. 
+
+There are some level of permission set in this API, so depending on the kind of user, there are roles and permissions assoinged to each credentials. This project uses python, flask and postgresql for it's backend and hosted on heruko. 
 
 All backend code follows [PEP8 style guidelines](https://www.python.org/dev/peps/pep-0008/)
 
 No frontend is developed for this app, you can use it using cURL or [Postman](https://www.postman.com)
 
+
+## Deployment
+
+This app is deployed on heruko under this link [Capstone-z Inc](https://capstonez.herokuapp.com/).
 
 ## Getting Started
 
@@ -24,13 +30,18 @@ I recommend working within a virtual environment whenever using Python for proje
 
 #### PIP Dependencies
 
-Once you have your virtual environment setup and running, install dependencies by running:
+After setting up the virtual environment, install dependencies by running:
 
 ```bash
 pip install -r requirements.txt
 ```
 
 This will install all of the required packages we selected within the `requirements.txt` file.
+
+**Note: If you add any other library to this project, remember to always run the command below to update your requirements.txt file*
+```bash
+pip freeze > requirements.txt
+```
 
 
 ## Running the server
@@ -41,15 +52,13 @@ To run the server, execute:
 
 ```bash
 source setup.sh
-export FLASK_APP=app.py
 export FLASK_ENV=development
 flask run
 ```
-Sourcing `setup.sh` sets some environment variables used by the app.
 
 Setting the `FLASK_ENV` variable to `development` will detect file changes and restart the server automatically.
 
-Setting the `FLASK_APP` variable to `app.py` directs flask to use the this file to find the application.
+Setting the `FLASK_APP` variable to `app/__init__.py` directs flask to use the this file to find the application.
 
 
 ## API Reference
@@ -211,10 +220,8 @@ To run the tests, run
 dropdb capstone_test
 createdb capstone_test
 psql capstone_test < db.psql
+source setup.sh
 python test_app.py
 ```
-
-## Deployment
-
-This app is deployed on heruko under this [link]().
-
+## Author
+Adenle Abiodun  `adenleabbey@hotmail.com`

@@ -7,6 +7,7 @@ from app.auth import AuthError, requires_auth
 import requests
 
 app = Flask(__name__, static_folder=None)
+app.app_context()
 setup_db(app)
 CORS(app)
 
@@ -119,13 +120,13 @@ def update_Actors(payload, id):
     if actor is None:
         abort(404)
     body = request.get_json()
-    if 'name' in body:
+    if body['name']:
         actor.name = body['name']
-    if 'age' in body:
+    if body['age']:
         actor.age = body['age']
-    if 'email' in body:
+    if body['email']:
         actor.email = body['email']
-    if 'salary' in body:
+    if body['salary']:
         actor.salary = body['salary']
     actor.update()
     return jsonify({
@@ -155,7 +156,7 @@ def delete_Movies(payload, id):
     This endpoint delete Movie given his ID
     '''
     try:
-        mov = Movies.query.filter_by(id=id).one_or_none()
+        mov = Movies.query.filter_by(Movies.id==id).one_or_none()
         mov.delete()
         return jsonify({
             'success': True
@@ -185,7 +186,7 @@ def insert_Movies(payload):
             movie.insert()
         return jsonify({
             'success': True
-        })
+        }, 200)
     except Exception:
         abort(404)
 
@@ -209,7 +210,7 @@ def update_Movies(payload, id):
     movie.update()
     return jsonify({
         'success': True,
-    })
+    }, 200)
 
 
 @app.errorhandler(404)
@@ -240,7 +241,7 @@ def Bad_request(error):
 
 
 @app.errorhandler(500)
-def InternelError(error):
+def InternalError(error):
     return jsonify({
         "success": False,
         "error": 500,

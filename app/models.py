@@ -5,15 +5,15 @@ import json
 from flask_migrate import Migrate
 
 db = SQLAlchemy()
-database_name = "capstone"
-user_name = "AshNelson"
-password = "ologinahtti1"
-database_path = "postgresql://{}:{}@{}/{}".format(
-    user_name,
-    password,
-    'localhost:5432',
-    database_name)
-# database_path = os.environ['DATABASE_URL']
+# database_name = "capstone"
+# user_name = "AshNelson"
+# password = "ologinahtti1"
+# database_path = "postgresql://{}:{}@{}/{}".format(
+#     user_name,
+#     password,
+#     'localhost:5432',
+#     database_name)
+database_path = os.environ['DATABASE_URL']
 
 
 def setup_db(app, database_path=database_path):

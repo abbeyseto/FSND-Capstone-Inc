@@ -10,9 +10,148 @@ All backend code follows [PEP8 style guidelines](https://www.python.org/dev/peps
 No frontend is developed for this app, you can use it using cURL or [Postman](https://www.postman.com)
 
 
-## Deployment
+## Deployment & Live Testing
 
-This app is deployed on heruko under this link [Capstone-z Inc](https://capstonez.herokuapp.com/).
+This API is deployed on heruko with this link as its base URL [Capstone-z Inc](https://capstonez.herokuapp.com/).
+
+```bash
+https://capstonez.herokuapp.com/
+```
+### Authentication
+Based on the specific role you would like to test for, each of the roles has a jwt token that is available in the `setup.sh` file in the parent directory of this repository.
+
+You will need to pass it as an Authorization header in this format
+
+```bash
+"Authorization": "Bearer ey78698ih67bjvbjkjbhjsnbahjb...."
+```
+*Above is just an example*
+
+### Endpoints
+
+- GET '/actors'
+- GET '/movies'
+- POST '/actors'
+- POST '/movies'
+- PATCH '/actors/<int:id>'
+- PATCH '/movies/<int:id>'
+- DELETE '/actors/<int:id>'
+- DELETE '/movies/<int:id>'
+
+Following is the demonstration of each endpoint.
+
+- GET '/actors'
+	- Fetch all Actor info from db
+	- Request Argument : None
+	- Returns : JSON response containing all actors with their info, and request status
+	- example
+		```
+		{
+		  "actors": [
+		    {
+		      "age": 38,
+		      "email": "Noha@gmail.com",
+		      "id": 3,
+		      "movies": [
+		        "GoGo",
+		        "alo"
+		      ],
+		      "name": "Noha",
+		      "salary": 1000
+		    }
+		  ],
+		  "success": true
+		}
+		```
+
+- GET '/movies'
+	- Fetch all movies info from db
+	- Request Argument : None
+	- Returns : JSON response containing all movies with their info, and request status
+	- example
+		```
+		{
+		  "movies": [
+		    {
+		      "actors": [
+		        "ALi",
+		        "Ahmed"
+		      ],
+		      "genre": "Romance",
+		      "id": 3,
+		      "length": 1.9
+		    }
+		  ],
+		  "success": true
+		}
+		```
+
+- POST '/actors'
+	- Insert Actor info into db
+	- Request Argument :  `name` `email` `age` `salary` `movie_ID`
+	- Returns : JSON response containing request status
+	- example
+		```
+		{
+		  "success": true
+		}
+		```
+
+- POST '/movies'
+	- Insert Movie info into db
+	- Request Argument : `name` `length` `genre` `actor_ID`
+	- Returns : JSON response containing request status
+	- example
+		```
+		{
+		  "success": true
+		}
+		```
+
+- PATCH '/actors/<int:id>'
+	- Updtae Actor info and insert it db
+	- Request Argument : `Actor id`  `name` `email` `age` `salary` 
+	- Returns : JSON response containing request status
+	- example
+		```
+		{
+		  "success": true
+		}
+		```
+
+- PATCH '/movies/<int:id>'
+	- Updtae Movie info and insert it db
+	- Request Argument : `Movie id` `name` `length` `genre`
+	- Returns : JSON response containing request status
+	- example
+		```
+		{
+		  "success": true
+		}
+		```
+
+- DELETE '/actors/<int:id>'
+	- Delete Actor from db
+	- Request Argument : Actor id
+	- Returns : JSON response containing request status
+	- example
+		```
+		{
+		  "success": true
+		}
+		```
+
+- DELETE '/movies/<int:id>'
+	- Delete Movie from db
+	- Request Argument : Movie id
+	- Returns : JSON response containing request status
+	- example
+		```
+		{
+		  "success": true
+		}
+		```
+
 
 ## Getting Started
 
@@ -71,130 +210,6 @@ Tokens nand jwts needed for Authentivation can be found in the `setup.sh` file
 - Base URL: You can run this API locally at the default `http://127.0.0.1:5000/`
 - Authentication: This app has 3 users. Each has his own token which are provided in `setup.sh` file. Details about each user privlages are provided below.
 
-### Endpoints
-
-- GET '/Actors'
-- GET '/Movies'
-- POST '/Actors'
-- POST '/Movies'
-- PATCH '/Actors/<int:id>'
-- PATCH '/Movies/<int:id>'
-- DELETE '/Actors/<int:id>'
-- DELETE '/Movies/<int:id>'
-
-Following is the demonstration of each endpoint.
-
-- GET '/Actors'
-	- Fetch all Actor info from db
-	- Request Argument : None
-	- Returns : JSON response containing all actors with their info, and request status
-	- example
-		```
-		{
-		  "Actors": [
-		    {
-		      "age": 38,
-		      "email": "Noha@gmail.com",
-		      "id": 3,
-		      "movies": [
-		        "GoGo",
-		        "alo"
-		      ],
-		      "name": "Noha",
-		      "salary": 1000
-		    }
-		  ],
-		  "success": true
-		}
-		```
-
-- GET '/Movies'
-	- Fetch all Movies info from db
-	- Request Argument : None
-	- Returns : JSON response containing all movies with their info, and request status
-	- example
-		```
-		{
-		  "Movies": [
-		    {
-		      "actors": [
-		        "ALi",
-		        "Ahmed"
-		      ],
-		      "genre": "Romance",
-		      "id": 3,
-		      "length": 1.9
-		    }
-		  ],
-		  "success": true
-		}
-		```
-
-- POST '/Actors'
-	- Insert Actor info into db
-	- Request Argument :  `name` `email` `age` `salary` `movie_ID`
-	- Returns : JSON response containing request status
-	- example
-		```
-		{
-		  "success": true
-		}
-		```
-
-- POST '/Movies'
-	- Insert Movie info into db
-	- Request Argument : `name` `length` `genre` `actor_ID`
-	- Returns : JSON response containing request status
-	- example
-		```
-		{
-		  "success": true
-		}
-		```
-
-- PATCH '/Actors/<int:id>'
-	- Updtae Actor info and insert it db
-	- Request Argument : `Actor id`  `name` `email` `age` `salary` 
-	- Returns : JSON response containing request status
-	- example
-		```
-		{
-		  "success": true
-		}
-		```
-
-- PATCH '/Movies/<int:id>'
-	- Updtae Movie info and insert it db
-	- Request Argument : `Movie id` `name` `length` `genre`
-	- Returns : JSON response containing request status
-	- example
-		```
-		{
-		  "success": true
-		}
-		```
-
-- DELETE '/Actors/<int:id>'
-	- Delete Actor from db
-	- Request Argument : Actor id
-	- Returns : JSON response containing request status
-	- example
-		```
-		{
-		  "success": true
-		}
-		```
-
-- DELETE '/Movies/<int:id>'
-	- Delete Movie from db
-	- Request Argument : Movie id
-	- Returns : JSON response containing request status
-	- example
-		```
-		{
-		  "success": true
-		}
-		```
 
 
 ### Users

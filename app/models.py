@@ -4,16 +4,16 @@ from flask_sqlalchemy import SQLAlchemy
 import json
 from flask_migrate import Migrate
 
+db = SQLAlchemy()
 database_name = "capstone"
 user_name = "AshNelson"
 password = "ologinahtti1"
-database_path = "postgres://{}:{}@{}/{}".format(
-  user_name,
-  password,
-  'localhost:5432',
-  database_name)
+database_path = "postgresql://{}:{}@{}/{}".format(
+    user_name,
+    password,
+    'localhost:5432',
+    database_name)
 # database_path = os.environ['DATABASE_URL']
-db = SQLAlchemy()
 
 
 def setup_db(app, database_path=database_path):
@@ -26,11 +26,11 @@ def setup_db(app, database_path=database_path):
 
 
 acting_in = db.Table(
-  'acting_in',
-  db.Column('actor_id', db.Integer,
-            db.ForeignKey('Actors.id'), primary_key=True),
-  db.Column('movie_id', db.Integer,
-            db.ForeignKey('Movies.id'), primary_key=True))
+    'acting_in',
+    db.Column('actor_id', db.Integer,
+              db.ForeignKey('Actors.id'), primary_key=True),
+    db.Column('movie_id', db.Integer,
+              db.ForeignKey('Movies.id'), primary_key=True))
 
 
 class Movies(db.Model):
@@ -59,11 +59,11 @@ class Movies(db.Model):
 
     def format(self):
         return {
-          'id': self.id,
-          'name': self.name,
-          'length': self.length,
-          'genre': self.genre,
-          'actors': [x.name for x in self.Actors]
+            'id': self.id,
+            'name': self.name,
+            'length': self.length,
+            'genre': self.genre,
+            'actors': [x.name for x in self.Actors]
         }
 
 
@@ -76,9 +76,9 @@ class Actors(db.Model):
     email = Column(String)
     salary = Column(Integer)
     movies = db.relationship(
-      'Movies',
-      secondary=acting_in,
-      backref=db.backref('Actors', lazy=True))
+        'Movies',
+        secondary=acting_in,
+        backref=db.backref('Actors', lazy=True))
 
     def __init__(self, name, age, email, salary):
         self.age = age
@@ -99,10 +99,10 @@ class Actors(db.Model):
 
     def format(self):
         return {
-          'id': self.id,
-          'name': self.name,
-          'age': self.age,
-          'email': self.email,
-          'salary': self.salary,
-          'movies': [x.name for x in self.movies]
+            'id': self.id,
+            'name': self.name,
+            'age': self.age,
+            'email': self.email,
+            'salary': self.salary,
+            'movies': [x.name for x in self.movies]
         }

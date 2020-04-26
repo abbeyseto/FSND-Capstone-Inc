@@ -20,7 +20,6 @@ new_actor = {
     "movie_ID": 2
 }
 new_movie = {
-    'id': '2',
     'length': 100,
     'genre': 'Drama',
     'name': 'Peace keepers',
@@ -57,245 +56,220 @@ class CapstoneTest(unittest.TestCase):
                 actor.delete()
             pass
 
-    # def test_get_Actors_assistant(self):
-    #     print("*** TESTING ASSISTANT ROLE - GET ACTORS")
-    #     res = self.client().get('/actors', headers={
-    #         "Authorization": 'bearer '+assistant_token})
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertEqual(body['success'], True)
-
-    # def test_get_Movies_assistant(self):
-    #     print("*** TESTING ASSISTANT ROLE - GET MOVIES")
-    #     res = self.client().get('/movies', headers={
-    #         "Authorization": 'bearer '+assistant_token})
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertEqual(body['success'], True)
-
-    # def test_get_Actors_producer(self):
-    #     print("*** TESTING PRODUCER ROLE - GET ACTORS")
-    #     res = self.client().get('/actors', headers={
-    #         "Authorization": 'bearer '+producer_token})
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertEqual(body['success'], True)
-
-    # def test_get_Movies_producer(self):
-    #     print("*** TESTING PRODUCER ROLE - GET MOVIES")
-    #     res = self.client().get('/movies', headers={
-    #         "Authorization": 'bearer '+producer_token})
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertEqual(body['success'], True)
-
-    # def test_get_Actors_director(self):
-    #     print("*** TESTING DIRECTOR ROLE - GET ACTORS")
-    #     res = self.client().get('/actors', headers={
-    #         "Authorization": 'bearer '+director_token})
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertEqual(body['success'], True)
-
-    # def test_get_Movies_director(self):
-    #     print("*** TESTING DIRECTOR ROLE - GET MOVIES")
-    #     res = self.client().get('/movies', headers={
-    #         "Authorization": 'bearer '+director_token})
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertEqual(body['success'], True)
-
-    # def test_404_wrong_endpoint_get_Actors(self):
-    #     print("*** TESTING WRONG ENDPOINTS - GET ACTORS")
-    #     res = self.client().get('/actorss', headers={
-    #         "Authorization": 'bearer '+assistant_token})
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 404)
-    #     self.assertEqual(body['success'], False)
-
-    # def test_404_wrong_endpoint_get_Movies(self):
-    #     print("*** TESTING WRONG ENDPOINTS - GET MOVIES")
-    #     res = self.client().get('/movi', headers={
-    #         "Authorization": 'bearer '+assistant_token})
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 404)
-    #     self.assertEqual(body['success'], False)
-
-    # def test_Unauthorized_Permission_NO_HEADERS_get_Actors(self):
-    #     print("*** TESTING UNAUTHORIZED PERMISSION - GET ACTORS")
-    #     res = self.client().get('/actors')
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['success'], False)
-
-    # @patch('requests.post')
-    def test_create_Actor(self):
-        res = self.client().post('/actors',
-                                 headers={
-                                     "Authorization": 'Bearer '+producer_token+''},
-                                 data=json.dumps(new_actor)
-                                 )
+    def test_get_Actors_assistant(self):
+        print("*** TESTING ASSISTANT ROLE - GET ACTORS")
+        res = self.client().get('/actors', headers={
+            "Authorization": 'bearer '+assistant_token})
         body = json.loads(res.data)
-        print(body)
-        actors = Actors.query.order_by(Actors.id).all()
-        total_actors = len(actors)
-        print("Total actors: ", total_actors)
-        added_actor = actors[total_actors-1]
-        print(added_actor.format())
         self.assertEqual(res.status_code, 200)
         self.assertEqual(body['success'], True)
-        # Clean up
-        added_actor.delete()
 
-    def test_422_wrong_Movie_ID_create_Actor(self):
-        res = self.client().post(
-            '/actors',
-            data={
-                "name": "john",
-                "age": "10",
-                "salary": "3000",
-                "email": "kcdskl@jcds.com",
-                "movie_ID": "1000"},
-            headers={"Authorization": 'bearer '+director_token}
-        )
+    def test_get_Movies_assistant(self):
+        print("*** TESTING ASSISTANT ROLE - GET MOVIES")
+        res = self.client().get('/movies', headers={
+            "Authorization": 'bearer '+assistant_token})
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+
+    def test_get_Actors_producer(self):
+        print("*** TESTING PRODUCER ROLE - GET ACTORS")
+        res = self.client().get('/actors', headers={
+            "Authorization": 'bearer '+producer_token})
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+
+    def test_get_Movies_producer(self):
+        print("*** TESTING PRODUCER ROLE - GET MOVIES")
+        res = self.client().get('/movies', headers={
+            "Authorization": 'bearer '+producer_token})
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+
+    def test_get_Actors_director(self):
+        print("*** TESTING DIRECTOR ROLE - GET ACTORS")
+        res = self.client().get('/actors', headers={
+            "Authorization": 'bearer '+director_token})
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+
+    def test_get_Movies_director(self):
+        print("*** TESTING DIRECTOR ROLE - GET MOVIES")
+        res = self.client().get('/movies', headers={
+            "Authorization": 'bearer '+director_token})
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+
+    def test_404_wrong_endpoint_get_Actors(self):
+        print("*** TESTING WRONG ENDPOINTS - GET ACTORS")
+        res = self.client().get('/actorss', headers={
+            "Authorization": 'bearer '+assistant_token})
         body = json.loads(res.data)
         self.assertEqual(res.status_code, 404)
         self.assertEqual(body['success'], False)
 
-    # def test_401_Unauthorized_Permission_create_Actor(self):
-    #     res = self.client().post(
-    #         '/actors',
-    #         data={
-    #             "name": "john",
-    #             "age": "10",
-    #             "salary": "3000",
-    #             "email": "kcdskl@jcds.com",
-    #             "movie_ID": "4"},
-    #         headers={"Authorization": 'bearer '+assistant_token}
-    #     )
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['success'], False)
+    def test_404_wrong_endpoint_get_Movies(self):
+        print("*** TESTING WRONG ENDPOINTS - GET MOVIES")
+        res = self.client().get('/movi', headers={
+            "Authorization": 'bearer '+assistant_token})
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(body['success'], False)
 
-    def test_create_Movie(self):
+    def test_Unauthorized_Permission_NO_HEADERS_get_Actors(self):
+        print("*** TESTING UNAUTHORIZED PERMISSION - GET ACTORS")
+        res = self.client().get('/actors')
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['success'], False)
+
+    
+    def test_create_Actor(self):
+        print("*** TESTING PRODUCER ROLE - POST ACTORS")
+        res = self.client().post('/actors',
+            headers={
+                "Authorization": 'Bearer '+producer_token+''},
+            data=json.dumps(new_actor)
+            )
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+        if res.status_code == 200:
+            print("ACTOR SUCCESSFULLY CREATED")
+
+
+    def test_Director_create_Actor(self):
+        print("*** TESTING DIRECTOR ROLE - POST ACTORS")
+        res = self.client().post(
+            '/actors',
+            data={
+                "name": "john",
+                "age": 10,
+                "salary": 3000,
+                "email": "kcdskl@jcds.com",
+                "movie_ID": 3},
+            headers={"Authorization": 'bearer '+director_token}
+        )
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+
+    def test_401_Unauthorized_Permission_create_Actor(self):
+        res = self.client().post(
+            '/actors',
+            data={
+                "name": "john",
+                "age": 10,
+                "salary": 3000,
+                "email": "kcdskl@jcds.com",
+                "movie_ID": 4},
+            headers={"Authorization": 'bearer '+assistant_token}
+        )
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['success'], False)
+
+
+    def test_401_Unauthorized_Permission_create_Movie(self):
         res = self.client().post(
             '/movies',
             data={
                 "name": "john",
-                "length": "10",
+                "length": 10,
                 "genre": "Action",
-                "actor_ID": "3"},
-            content_type='application/json',
-            headers={"Authorization": 'bearer '+producer_token}
+                "actor_ID": 10000},
+            headers={"Authorization": 'bearer '+assistant_token}
         )
         body = json.loads(res.data)
-        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 401)
         self.assertEqual(body['success'], False)
 
-    def test_422_wrong_Actor_ID_create_Movie(self):
-        res = self.client().post(
-            '/movies',
-            data=new_movie,
-            content_type='application/json',
-            headers={"Authorization": 'bearer '+producer_token}
-        )
-        body = json.loads(res.data)
-        self.assertEqual(res.status_code, 422)
-        self.assertEqual(body['success'], False)
-
-    # def test_401_Unauthorized_Permission_create_Movie(self):
-    #     res = self.client().post(
-    #         '/movies',
-    #         data={
-    #             "name": "john",
-    #             "length": "10",
-    #             "genre": "Action",
-    #             "actor_ID": "10000"},
-    #         headers={"Authorization": 'bearer '+assistant_token}
-    #     )
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['success'], False)
-
-    def test_update_Movies(self):
+    def test_update_Movies_LargeID_Fail(self):
         res = self.client().patch(
-            "/movies/2",
+            "/movies/10000",
             data=new_movie,
             content_type='application/json',
             headers={"Authorization": "Bearer "+producer_token}
         )
         body = json.loads(res.data)
-        self.assertEqual(res.status_code, 200)
+        self.assertEqual(res.status_code, 400)
         self.assertEqual(body['success'], False)
 
-    # def test_404_wrong_ID_update_Movies(self):
-    #     res = self.client().patch(
-    #         '/movies/1000',
-    #         data={
-    #             "name": "john",
-    #             "length": "10",
-    #             "genre": "Action"},
-    #         headers={"Authorization": 'bearer '+producer_token}
-    #     )
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 404)
-    #     self.assertEqual(body['success'], False)
-
-    # def test_401_Unauthorized_Permission_update_Movies(self):
-    #     res = self.client().patch(
-    #         '/movies/1',
-    #         data={
-    #             "name": "john",
-    #             "length": "10",
-    #             "genre": "Action"},
-    #         headers={"Authorization": 'bearer '+assistant_token}
-    #     )
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['success'], False)
-
-    # def test_404_wrong_ID_update_Actors(self):
-    #     res = self.client().patch(
-    #         '/actors/1000',
-    #         data={
-    #             "name": "john",
-    #             "age": "10",
-    #             "salary": "3000",
-    #             "email": "kcdskl@jcds.com"},
-    #         headers={"Authorization": 'bearer '+producer_token}
-    #     )
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 404)
-    #     self.assertEqual(body['success'], False)
-
-    # def test_422_Wrong_ID_delete_Actor(self):
-    #     res = self.client().delete('/actors/1000', headers={
-    #         "Authorization": 'bearer '+producer_token})
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 422)
-    #     self.assertEqual(body['success'], False)
-
-    # def test_401_Unauthorized_Permission_delete_Actor(self):
-    #     res = self.client().delete('/actors/1', headers={
-    #         "Authorization": 'bearer '+assistant_token})
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['success'], False)
-
-    def test_422_Wrong_ID_delete_Movies(self):
-        res = self.client().delete('/movies/1000',
-        headers={
-            "Authorization": 'bearer '+producer_token})
+    def test_422_wrong_ID_update_Movies(self):
+        print("*** TESTING PRODUCER ROLE - POST WRONG MOVIE ID")
+        res = self.client().patch(
+            '/movies/1000',
+            data={
+                "name": "john",
+                "length": 10,
+                "genre": "Action"},
+            headers={"Authorization": 'bearer '+producer_token}
+        )
         body = json.loads(res.data)
         self.assertEqual(res.status_code, 422)
         self.assertEqual(body['success'], False)
 
-    # def test_Unauthorized_Permission_delete_Movies(self):
-    #     res = self.client().delete('/movies/2', headers={
-    #         "Authorization": 'bearer '+assistant_token})
-    #     body = json.loads(res.data)
-    #     self.assertEqual(res.status_code, 401)
-    #     self.assertEqual(body['success'], False)
+    def test_401_Unauthorized_Permission_update_Movies(self):
+        res = self.client().patch(
+            '/movies/1',
+            data={
+                "name": "john",
+                "length": 10,
+                "genre": "Action"},
+            headers={"Authorization": 'bearer '+assistant_token}
+        )
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['success'], False)
+
+    def test_422_wrong_ID_update_Actors(self):
+        res = self.client().patch(
+            '/actors/1000',
+            data={
+                "name": "john",
+                "age": 10,
+                "salary": 3000,
+                "email": "kcdskl@jcds.com"},
+            headers={"Authorization": 'bearer '+producer_token}
+        )
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 422)
+        self.assertEqual(body['success'], False)
+
+    def test_delete_Actor(self):
+        print("*** TESTING PRODUCER ROLE - DELETE ACTORS")
+        res = self.client().delete('/actors/1', headers={
+            "Authorization": 'bearer '+producer_token})
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+
+    def test_401_Unauthorized_Permission_delete_Actor(self):
+        res = self.client().delete('/actors/1', headers={
+            "Authorization": 'bearer '+assistant_token})
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['success'], False)
+
+    def test_delete_Movies(self):
+        print("*** TESTING PRODUCER ROLE - DELETE MOVIES")
+        res = self.client().delete('/movies/1',
+        headers={
+            "Authorization": 'bearer '+producer_token})
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(body['success'], True)
+
+    def test_Unauthorized_Permission_delete_Movies(self):
+        res = self.client().delete('/movies/2', headers={
+            "Authorization": 'bearer '+assistant_token})
+        body = json.loads(res.data)
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(body['success'], False)
 
 
 if __name__ == "__main__":

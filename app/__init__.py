@@ -11,6 +11,7 @@ import requests
 app = Flask(__name__, instance_relative_config=False)
 setup_db(app)
 
+
 @app.after_request
 def after_request(response):
     response.headers.add(
@@ -21,6 +22,7 @@ def after_request(response):
         'GET,POST,DELETE,PATCH')
     return response
 
+
 @app.route('/login')
 def login():
     return redirect("https://setoapps.auth0.com/authorize?&"
@@ -28,6 +30,7 @@ def login():
                     "client_id=pudau6mZxjNgrN9PV1D0P7fjpXAob3wP&"
                     "redirect_uri=http://127.0.0.1:5000/authenticate&"
                     "scope=openid%20profile%20email&state=xyzABC123")
+
 
 @app.route('/authenticate')
 def authenticate():
@@ -47,9 +50,11 @@ def authenticate():
     token = data.get('access_token')
     return json.dumps(data)
 
+
 @app.route('/')
 def welcome():
     return render_template('index.html')
+
 
 @app.route('/actors', methods=['GET'])
 @requires_auth(permission='get:Actors')
@@ -66,6 +71,7 @@ def get_Actors(payload):
     print(result)
     return jsonify(result)
 
+
 @app.route('/actors/<int:id>', methods=['DELETE'])
 @requires_auth(permission='delete:Actors')
 def delete_Actors(payload, id):
@@ -73,13 +79,22 @@ def delete_Actors(payload, id):
     This endpoint delete Actor given his ID
     '''
     try:
-        act = Actors.query.filter_by(id=id).one_or_none()
-        act.delete()
-        return jsonify({
-            'success': True
-        })
-    except Exception:
+        actor = Actors.query.filter_by(id=id).one_or_none()
+        if actor is None:
+            return jsonify({
+                "message": "actor not found",
+                "error": 404
+            })
+        actor.delete()
+    except:
+        actor.end()
         abort(422)
+    finally:
+        return jsonify({
+            'success': True,
+            "deleted_id": id
+        })
+
 
 @app.route('/actors', methods=['POST'])
 @requires_auth(permission='post:Actors')
@@ -89,24 +104,23 @@ def insert_Actors(payload):
     '''
     body = request.get_json()
     try:
-        actor = Actors(
-            name=body['name'],
-            age=body['age'],
-            email=body['email'],
-            salary=body['salary'])
-        movies = Movies.query.filter(
-            Movies.id == body['movie_ID']).one_or_none()
-        if movies:
-            actor.movies = [movies]
-            actor.insert()
-        else:
-            # actor.movies.append(movies_id=body['movie_ID'])
-            actor.insert()
+        name = body.get("name")
+        print(name)
+        age = body.get("age")
+        print(age)
+        gender = body.get("email")
+        salary = body.get("salary")
+        print(gender)
+        new_actor = Actors(name=name, age=age, gender=gender, salary=salary)
+        new_actor.insert()
+    except:
+        new_actor.end()
+        abort(422)
+    finally:
         return jsonify({
             'success': True
         })
-    except Exception:
-        abort(404)
+
 
 @app.route('/actors/<int:id>', methods=['PATCH'])
 @requires_auth(permission='patch:Actors')
@@ -114,22 +128,21 @@ def update_Actors(payload, id):
     '''
     This endpoint updates an actor info given his id
     '''
-    actor = Actors.query.filter(Actors.id == id).one_or_none()
-    if actor is None:
-        abort(404)
     body = request.get_json()
-    if body['name']:
-        actor.name = body['name']
-    if body['age']:
-        actor.age = body['age']
-    if body['email']:
-        actor.email = body['email']
-    if body['salary']:
-        actor.salary = body['salary']
-    actor.update()
+    try:
+        actor = Actors.query.filter_by(id=id).first()
+        actor.name = body.get("name")
+        actor.age = body.get("age")
+        actor.gender = body.get("gender")
+        actor.salary = body.get("salary")
+        actor.movie_ID = body.get("movie_ID")
+        actor.update()
+    except:
+        abort(422)
     return jsonify({
-        'success': True,
+        'success': True
     })
+
 
 @app.route('/movies', methods=['GET'])
 @requires_auth(permission='get:Movies')
@@ -145,6 +158,7 @@ def get_Movies(payload):
     }
     return jsonify(result)
 
+
 @app.route('/movies/<int:id>', methods=['DELETE'])
 @requires_auth(permission='delete:Movies')
 def delete_Movies(payload, id):
@@ -152,16 +166,22 @@ def delete_Movies(payload, id):
     This endpoint delete Movie given his ID
     '''
     try:
-        found_movies = Movies.query.filter_by(id=id).all()
-        if found_movies:
-            found_movies.delete()
-        else:
-            abort(422)
-        return jsonify({
-            'success': True
-        })
-    except Exception:
+        movie = Movies.query.filter_by(id=id).one_or_none()
+        if movie is None:
+            return jsonify({
+                "message": "movie not found",
+                "error": 404
+            })
+        movie.delete()
+    except:
+        movie.end()
         abort(422)
+    finally:
+        return jsonify({
+            'success': True,
+            "deleted_id": id
+        })
+
 
 @app.route('/movies', methods=['POST'])
 @requires_auth(permission='post:Movies')
@@ -171,22 +191,21 @@ def insert_Movies(payload):
     '''
     body = request.get_json()
     try:
-        movie = Movies(
-            name=body['name'],
-            length=body['length'],
-            genre=body['genre'])
-        actors = Actors.query.filter(
-            Actors.id == body['actor_ID']).one_or_none()
-        if actors:
-            movie.Actors = [actors]
-            movie.insert()
-        else:
-            movie.insert()
+        name = body.get("name")
+        print(name)
+        genre = body.get("genre")
+        print(genre)
+        length = body.get("length")
+        new_movie = Actors(name=name, genre=genre, length=length)
+        new_movie.insert()
+    except:
+        new_movie.end()
+        abort(422)
+    finally:
         return jsonify({
             'success': True
-        }, 200)
-    except Exception:
-        abort(404)
+        })
+
 
 @app.route('/movies/<int:id>', methods=['PATCH'])
 @requires_auth(permission='patch:Movies')
@@ -194,20 +213,19 @@ def update_Movies(payload, id):
     '''
     This endpoint updates a movie given it's id
     '''
-    movie = Movies.query.filter(Movies.id == id).one_or_none()
-    if movie is None:
-        abort(404)
     body = request.get_json()
-    if body['name']:
-        movie.name = body['name']
-    if body['length']:
-        movie.age = body['length']
-    if  body['genre']:
-        movie.email = body['genre']
-    movie.update()
+    try:
+        movie = Movies.query.filter_by(id=id).first()
+        movie.name = body.get("name")
+        movie.genre = body.get("genre")
+        movie.length = body.get("length")
+        movie.update()
+    except:
+        abort(422)
     return jsonify({
-        'success': True,
-    }, 200)
+        'success': True
+    })
+
 
 @app.errorhandler(404)
 def not_found(error):
@@ -217,6 +235,7 @@ def not_found(error):
         'message': "Not found"
     }), 404
 
+
 @app.errorhandler(422)
 def unprocessable(error):
     return jsonify({
@@ -224,6 +243,7 @@ def unprocessable(error):
         'error': 422,
         'messege': "Unprocessable request"
     }), 422
+
 
 @app.errorhandler(400)
 def Bad_request(error):
@@ -233,6 +253,7 @@ def Bad_request(error):
         'messege': "Bad request"
     }), 400
 
+
 @app.errorhandler(500)
 def InternalError(error):
     return jsonify({
@@ -240,6 +261,7 @@ def InternalError(error):
         "error": 500,
         "message": "Internal server error"
     }), 500
+
 
 @app.errorhandler(AuthError)
 def unauthorized(error):

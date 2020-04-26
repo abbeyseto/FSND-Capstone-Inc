@@ -6,7 +6,7 @@ from unittest.mock import patch
 import requests
 from app.models import setup_db, Actors, Movies
 import datetime
-from app import create_app
+from app import app
 
 producer_token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InhqbTBWbUFTRGtOdEV2NC1JYm83OCJ9.eyJpc3MiOiJodHRwczovL3NldG9hcHBzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1ZWE0Mzc2NTZiNjliYzBjMTJkNGIwY2IiLCJhdWQiOlsiY2Fwc3RvbmUiLCJodHRwczovL3NldG9hcHBzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE1ODc4Nzc3MDksImV4cCI6MTU4ODc0MTcwOSwiYXpwIjoicHVkYXU2bVp4ak5nck45UFYxRDBQN2ZqcFhBb2Izd1AiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwicGVybWlzc2lvbnMiOlsiZGVsZXRlOkFjdG9ycyIsImRlbGV0ZTpNb3ZpZXMiLCJnZXQ6QWN0b3JzIiwiZ2V0Ok1vdmllcyIsInBhdGNoOkFjdG9ycyIsInBhdGNoOk1vdmllcyIsInBvc3Q6QWN0b3JzIiwicG9zdDpNb3ZpZXMiXX0.SSnNjt03kNePcUghX6YYCxSPT8vqyE3Dzif4t2E8JAMbb4u8M58sTS6Z7UQQeMupJa21bxTL7zH6B_dGC_CDQu4LqCIsL7OmoZAnmjdGFSD--ILWAZOHhElK7HhY0sCUYK241Ygx_WyTx3Hp9prIB9wz1LM5jCWksSz72nEir6RNIZR4XrKQEz0Vw_jAHXf7VN95vWwzyRdwsuLM726lV3pTtuNwlmAV39c2Mbt3BCsQBiGrcww_Tp4j4B3jje21XEEjBxupo6la9aA-s8fyudE_mnkimCZUL1c65ID8MzSzv0LaQ7lVlQwoeVyxdgOlSG9GtZi4rPf9DevX7C7dgQ"
 director_token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6InhqbTBWbUFTRGtOdEV2NC1JYm83OCJ9.eyJpc3MiOiJodHRwczovL3NldG9hcHBzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1ZWE0MzcyZjFjYzFhYzBjMTQ2NTIxNWEiLCJhdWQiOlsiY2Fwc3RvbmUiLCJodHRwczovL3NldG9hcHBzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE1ODc4NzczODUsImV4cCI6MTU4ODc0MTM4NSwiYXpwIjoicHVkYXU2bVp4ak5nck45UFYxRDBQN2ZqcFhBb2Izd1AiLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIiwicGVybWlzc2lvbnMiOlsiZGVsZXRlOkFjdG9ycyIsImdldDpBY3RvcnMiLCJnZXQ6TW92aWVzIiwicGF0Y2g6QWN0b3JzIiwicGF0Y2g6TW92aWVzIiwicG9zdDpBY3RvcnMiXX0.VootwcAYcbpE-6EM1JoXP80h2pVDfTAfP8VgdMoxXfqcFA2aOw9j0zNyrO0NZEc8UaSRRVH_UYz87HbvnQutXkQZYez20Y6GX-oS0grAvGIeErqj9BuNxQtB6otLq8Pv56E8a9qxrDOhxMCxe6aCJbIHS3WHySEtSrPPeU9eB6NuTIXJHtQOASVKs0BY-cuIkLf54MqABMjbPbh5_JDT0gxnFkl7rWkmxnRvsU8bI9IXKjJ51jKcqN-bgcf8nmbIuNakQRnjefw-SFNVuvB72guVAU114JtsforAdMkFudGGTs6I2b5AyPZ8cqvWM4A3GvbLwvPZdJUdeKqbECPciw"
@@ -29,7 +29,7 @@ new_movie = {
 
 class CapstoneTest(unittest.TestCase):
     def setUp(self):
-        self.app = create_app()
+        self.app = app
         self.client = self.app.test_client
         self.database_name = "capstone_test"
         self.user_name = "AshNelson"
@@ -43,8 +43,8 @@ class CapstoneTest(unittest.TestCase):
             self.app, database_path=self.app.config["SQLALCHEMY_DATABASE_URI"])
 
         # with self.app.app_context():
-        self.db = SQLAlchemy()
-        self.db.init_app(self.app)
+        # self.db = SQLAlchemy()
+        # self.db.init_app(self.app)
         # self.db.create_all()
 
         def tearDown(self):

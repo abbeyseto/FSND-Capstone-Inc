@@ -110,9 +110,12 @@ def insert_Actors(payload):
     email = body.get('email', None)
     salary = body.get('salary', None)
     print(email)
+    movies = Movies.query.filter(
+        Movies.id == body['movie_ID']).one_or_none()
 
     try:
         new_actor = Actors(name=name, age=age, email=email, salary=salary)
+        new_actor.movies = [movies]
         new_actor.insert()
         return jsonify({
             'success': True
@@ -192,9 +195,15 @@ def insert_Movies(payload):
     name = body.get('name', None)
     genre = body.get('genre', None)
     length = body.get('length', None)
+    actor_ID = body.get('actor_ID', None)
+    actors = Actors.query.filter(
+        Actors.id == body['actor_ID']).one_or_none()
+
     try:
         new_movie = Movies(name=name, genre=genre, length=length)
+        new_movie.Actors = [actors]
         new_movie.insert()
+
         return jsonify({
             'success': True
         })

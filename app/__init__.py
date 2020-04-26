@@ -198,13 +198,14 @@ def insert_Movies(payload):
     length = body.get('length', None)
     actor_ID = body.get('actor_ID', None)
     actors = Actors.query.filter(
-        Actors.id == body['actor_ID']).one_or_none()
-
+        Actors.id == actor_ID).one_or_none()
     try:
         new_movie = Movies(name=name, genre=genre, length=length)
-        new_movie.Actors = [actors]
-        new_movie.insert()
-
+        if actors:
+            new_movie.Actors = [actors]
+            new_movie.insert()
+        else:
+            new_movie.insert()
         return jsonify({
             'success': True
         })

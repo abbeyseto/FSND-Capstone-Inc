@@ -103,23 +103,22 @@ def insert_Actors(payload):
     This endpoint insert Actor information
     '''
     body = request.get_json()
+    name = body.get('name', None)
+    print(name)
+    age = body.get('age', None)
+    print(age)
+    email = body.get('email', None)
+    salary = body.get('salary', None)
+    print(email)
+
     try:
-        name = body.get("name")
-        print(name)
-        age = body.get("age")
-        print(age)
-        gender = body.get("email")
-        salary = body.get("salary")
-        print(gender)
-        new_actor = Actors(name=name, age=age, gender=gender, salary=salary)
+        new_actor = Actors(name=name, age=age, email=email, salary=salary)
         new_actor.insert()
-    except:
-        new_actor.end()
-        abort(422)
-    finally:
         return jsonify({
             'success': True
         })
+    except:
+        abort(422)
 
 
 @app.route('/actors/<int:id>', methods=['PATCH'])
@@ -190,21 +189,17 @@ def insert_Movies(payload):
     This endpoint insert Movie information
     '''
     body = request.get_json()
+    name = body.get('name', None)
+    genre = body.get('genre', None)
+    length = body.get('length', None)
     try:
-        name = body.get("name")
-        print(name)
-        genre = body.get("genre")
-        print(genre)
-        length = body.get("length")
-        new_movie = Actors(name=name, genre=genre, length=length)
+        new_movie = Movies(name=name, genre=genre, length=length)
         new_movie.insert()
-    except:
-        new_movie.end()
-        abort(422)
-    finally:
         return jsonify({
             'success': True
         })
+    except:
+        abort(422)
 
 
 @app.route('/movies/<int:id>', methods=['PATCH'])

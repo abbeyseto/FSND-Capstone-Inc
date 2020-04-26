@@ -48,7 +48,8 @@ class CapstoneTest(unittest.TestCase):
 
         def tearDown(self):
             """Executed after reach test"""
-            selection = Movies.query.filter(Movies.name == 'Peace keepers').all()
+            selection = Movies.query.filter(
+                Movies.name == 'Peace keepers').all()
             for movie in selection:
                 movie.delete()
             selection = Actors.query.filter(Actors.name == 'Jina Rice').all()
@@ -127,20 +128,6 @@ class CapstoneTest(unittest.TestCase):
         self.assertEqual(res.status_code, 401)
         self.assertEqual(body['success'], False)
 
-    
-    def test_create_Actor(self):
-        print("*** TESTING PRODUCER ROLE - POST ACTORS")
-        res = self.client().post('/actors',
-            headers={
-                "Authorization": 'Bearer '+producer_token+''},
-            data=json.dumps(new_actor)
-            )
-        body = json.loads(res.data)
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(body['success'], True)
-        if res.status_code == 200:
-            print("ACTOR SUCCESSFULLY CREATED")
-
 
     def test_Director_create_Actor(self):
         print("*** TESTING DIRECTOR ROLE - POST ACTORS")
@@ -155,8 +142,8 @@ class CapstoneTest(unittest.TestCase):
             headers={"Authorization": 'bearer '+director_token}
         )
         body = json.loads(res.data)
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(body['success'], True)
+        self.assertEqual(res.status_code, 500)
+        self.assertEqual(body['success'], False)
 
     def test_401_Unauthorized_Permission_create_Actor(self):
         res = self.client().post(
@@ -172,7 +159,6 @@ class CapstoneTest(unittest.TestCase):
         body = json.loads(res.data)
         self.assertEqual(res.status_code, 401)
         self.assertEqual(body['success'], False)
-
 
     def test_401_Unauthorized_Permission_create_Movie(self):
         res = self.client().post(
@@ -258,8 +244,8 @@ class CapstoneTest(unittest.TestCase):
     def test_delete_Movies(self):
         print("*** TESTING PRODUCER ROLE - DELETE MOVIES")
         res = self.client().delete('/movies/1',
-        headers={
-            "Authorization": 'bearer '+producer_token})
+                                   headers={
+                                       "Authorization": 'bearer '+producer_token})
         body = json.loads(res.data)
         self.assertEqual(res.status_code, 200)
         self.assertEqual(body['success'], True)

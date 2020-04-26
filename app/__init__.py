@@ -104,19 +104,20 @@ def insert_Actors(payload):
     '''
     body = request.get_json()
     name = body.get('name', None)
-    print(name)
     age = body.get('age', None)
-    print(age)
     email = body.get('email', None)
     salary = body.get('salary', None)
-    print(email)
+    print(name, age, email, salary)
     movies = Movies.query.filter(
         Movies.id == body['movie_ID']).one_or_none()
 
     try:
         new_actor = Actors(name=name, age=age, email=email, salary=salary)
-        new_actor.movies = [movies]
-        new_actor.insert()
+        if movies:
+            new_actor.movies = [movies]
+            new_actor.insert()
+        else:
+            new_actor.insert()
         return jsonify({
             'success': True
         })
